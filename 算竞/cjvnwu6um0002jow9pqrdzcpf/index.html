@@ -100,16 +100,17 @@
 <meta name="keywords" content="算法,数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="非旋转treap">
-<meta property="og:url" content="http://yoursite.com/算竞/cjvnv5rvl0001b8w947ynhd0f/index.html">
+<meta property="og:url" content="http://yoursite.com/算竞/cjvnwu6um0002jow9pqrdzcpf/index.html">
 <meta property="og:site_name" content="Rend&#39;s Blog">
 <meta property="og:description" content="历时28h调出的代码orz...还好没放弃">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/Access-Rend/Images/blob/master/treap01.jpg?raw=true">
 <meta property="og:image" content="https://github.com/Access-Rend/Images/blob/master/treap02.jpg?raw=true">
-<meta property="og:updated_time" content="2019-05-14T13:59:10.658Z">
+<meta property="og:updated_time" content="2019-05-14T14:13:47.486Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="非旋转treap">
 <meta name="twitter:description" content="历时28h调出的代码orz...还好没放弃">
-<meta name="twitter:image" content="https://github.com/Access-Rend/Images/blob/master/treap02.jpg?raw=true">
+<meta name="twitter:image" content="https://github.com/Access-Rend/Images/blob/master/treap01.jpg?raw=true">
 
 
 
@@ -117,7 +118,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/算竞/cjvnv5rvl0001b8w947ynhd0f/">
+  <link rel="canonical" href="http://yoursite.com/算竞/cjvnwu6um0002jow9pqrdzcpf/">
 
 
 
@@ -334,7 +335,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/算竞/cjvnv5rvl0001b8w947ynhd0f/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/算竞/cjvnwu6um0002jow9pqrdzcpf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Rend人大">
@@ -377,7 +378,7 @@
                 
               
 
-              <time title="创建时间：2019-05-14 20:38:30 / 修改时间：21:59:10" itemprop="dateCreated datePublished" datetime="2019-05-14T20:38:30+08:00">2019-05-14</time>
+              <time title="创建时间：2019-05-14 20:38:30 / 修改时间：22:13:47" itemprop="dateCreated datePublished" datetime="2019-05-14T20:38:30+08:00">2019-05-14</time>
             
 
             
@@ -438,28 +439,43 @@
       
         <p><a href="https://www.cnblogs.com/nietzsche-oier/p/6748292.html" target="_blank" rel="noopener"><strong>https://www.cnblogs.com/nietzsche-oier/p/6748292.html</strong></a>详细讲解<br><a href="https://www.cnblogs.com/sdzwyq/p/9916640.html" target="_blank" rel="noopener"><strong>https://www.cnblogs.com/sdzwyq/p/9916640.html</strong></a>代码短，本篇所采用此博客的代码</p>
 <hr>
+<br>
+
 <pre><code>我看了很多代码，然而花了几个小时，发现解释的有点恼火，所以自己写一个吧。
 非旋转treap和fhq（防火墙)treap，似乎是一个玩意。(%fhq) 
-简而言之，核心操作 分裂 与 合并  都是基于二叉搜索树查询时的路径操作的。</code></pre><h1 id="Split-分裂-按权值分裂"><a href="#Split-分裂-按权值分裂" class="headerlink" title="Split(分裂)按权值分裂"></a>Split(分裂)按权值分裂</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">split</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span>&amp;l,<span class="keyword">int</span>&amp;r,<span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x)&#123;l=r=<span class="number">0</span>;<span class="keyword">return</span>;&#125;<span class="comment">//到空节点返回0</span></span><br><span class="line">    <span class="keyword">if</span>(val[x]&lt;=k)&#123;l=x;split(rs[l],rs[l],r,k);pu(l);&#125;<span class="comment">//x分给左树,接着分x的右儿子</span></span><br><span class="line">    <span class="keyword">else</span>&#123;r=x;split(ls[r],l,ls[r],k);pu(r);&#125;<span class="comment">//x分给右树,接着分x的左儿子</span></span><br><span class="line">&#125;</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">***</span><br><span class="line"></span><br><span class="line">##	函数及参数解释：</span><br><span class="line"></span><br><span class="line">##<span class="meta">#	 x：当前节点；k：依据的权值；</span></span><br><span class="line"></span><br><span class="line">	引用的l和r，应当理解为当前层待插入位置指针（指递归层）。</span><br><span class="line">	按照下图解释，分裂好的treap结构如下图：</span><br><span class="line"></span><br><span class="line">![split时的情况](https:<span class="comment">//github.com/Access-Rend/Images/blob/master/treap01.jpg?raw=true "把手拿开啦")</span></span><br><span class="line"></span><br><span class="line">	按权值&lt;<span class="number">6</span>分裂为左右树，图示树的形态有所改变。（虚线为最深层(递归层)待插入位置指针）</span><br><span class="line">	考虑二叉搜索树的查询路径。</span><br><span class="line">	讨论一种小于情况：按&lt;v分裂树，对于路径上处理时考虑x节点，①若v[x]&lt;v，则v存在于x节点的右子树中。	由不等式可得ls[x]&lt;v[x]&lt;v，则x以及ls[x]都可划分于左树中，将它们插入虚线位置；	②而x的右子树还需要进一步处理（二叉搜索树基本操作），进入右子树。（你也可以理解成由不等式无法得出x的右子树中哪些属于左树，哪些属于右树，需要进一步处理）</span><br><span class="line">	由于上一步进入了右子树，所以后续操作中所有需插入左树的节点一定大于上次更新点的点。将其插入上次更新点的点的右子树中。</span><br><span class="line">	反之亦然。</span><br><span class="line">	由于每一层递归是引用的上一层，所以说第一层递归的指针实质上是函数外部传参时传入的两个根。也就是说，完整执行一次merge，我们会得到两个分裂好的树的树根。</span><br><span class="line">	从而不难理解代码中引用部分的内容。</span><br><span class="line"></span><br><span class="line">#	Split(分裂)按排名(第k大)分裂</span><br><span class="line"></span><br><span class="line">    将v换成与size相关的计算即可。</span><br><span class="line"></span><br><span class="line">```cpp</span><br><span class="line"><span class="keyword">void</span> split(<span class="keyword">int</span> x,<span class="keyword">int</span>&amp;l,<span class="keyword">int</span>&amp;r,<span class="keyword">int</span> k)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x)&#123;l=r=<span class="number">0</span>;<span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="keyword">if</span>(sz[ls[x]]+<span class="number">1</span>&lt;=k)&#123;l=x;split(rs[l],rs[l],r,k-sz[ls[x]]<span class="number">-1</span>);pu(l);&#125;<span class="comment">//注意修改k</span></span><br><span class="line">    <span class="keyword">else</span>&#123;r=x;split(ls[r],l,ls[r],k);pu(r);&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+简而言之，核心操作 分裂 与 合并  都是基于二叉搜索树查询时的路径操作的。</code></pre><h1 id="Split-分裂-按权值分裂"><a href="#Split-分裂-按权值分裂" class="headerlink" title="Split(分裂)按权值分裂"></a>Split(分裂)按权值分裂</h1><pre><code><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">split</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span>&amp;l,<span class="keyword">int</span>&amp;r,<span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!x)&#123;l=r=<span class="number">0</span>;<span class="keyword">return</span>;&#125;<span class="comment">//到空节点返回0</span></span><br><span class="line">	<span class="keyword">if</span>(val[x]&lt;=k)&#123;l=x;split(rs[l],rs[l],r,k);pu(l);&#125;<span class="comment">//x分给左树,接着分x的右儿子</span></span><br><span class="line">	<span class="keyword">else</span>&#123;r=x;split(ls[r],l,ls[r],k);pu(r);&#125;<span class="comment">//x分给右树,接着分x的左儿子</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre><h2 id="函数及参数解释："><a href="#函数及参数解释：" class="headerlink" title="函数及参数解释："></a>函数及参数解释：</h2><h3 id="x：当前节点；k：依据的权值；"><a href="#x：当前节点；k：依据的权值；" class="headerlink" title="x：当前节点；k：依据的权值；"></a>x：当前节点；k：依据的权值；</h3><p>引用的l和r，应当理解为当前层待插入位置指针（指递归层）。<br>按照下图解释，分裂好的treap结构如下图：</p>
+<p><img src="https://github.com/Access-Rend/Images/blob/master/treap01.jpg?raw=true" alt="split时的情况" title="把手拿开啦"></p>
+<blockquote>
+<p>   按权值&lt;                            6分裂为左右树，图示树的形态有所改变。（虚线为最深层(递归层)待插入位置指针）<br>    考虑二叉搜索树的查询路径。<br>    讨论一种小于情况：按&lt;v分裂树，对于路径上处理时考虑x节点，①若v[x]&lt;v，则v存在于x节点的右子树中。    由不等式可得ls[x]&lt;v[x]&lt;v，则x以及ls[x]都可划分于左树中，将它们插入虚线位置；    ②而x的右子树还需要进一步处理（二叉搜索树基本操作），进入右子树。（你也可以理解成由不等式无法得出x的右子树中哪些属于左树，哪些属于右树，需要进一步处理）<br>    由于上一步进入了右子树，所以后续操作中所有需插入左树的节点一定大于上次更新点的点。将其插入上次更新点的点的右子树中。<br>    反之亦然。<br>    由于每一层递归是引用的上一层，所以说第一层递归的指针实质上是函数外部传参时传入的两个根。也就是说，完整执行一次merge，我们会得到两个分裂好的树的树根。<br>    从而不难理解代码中引用部分的内容。</p>
+</blockquote>
+<hr>
+<br>
+
+<h1 id="Split-分裂-按排名-第k大-分裂"><a href="#Split-分裂-按排名-第k大-分裂" class="headerlink" title="Split(分裂)按排名(第k大)分裂"></a>Split(分裂)按排名(第k大)分裂</h1><blockquote>
+<p> 将v换成与size相关的计算即可。</p>
+</blockquote>
+<pre><code><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">split</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span>&amp;l,<span class="keyword">int</span>&amp;r,<span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!x)&#123;l=r=<span class="number">0</span>;<span class="keyword">return</span>;&#125;</span><br><span class="line">	<span class="keyword">if</span>(sz[ls[x]]+<span class="number">1</span>&lt;=k)&#123;l=x;split(rs[l],rs[l],r,k-sz[ls[x]]<span class="number">-1</span>);pu(l);&#125;<span class="comment">//注意修改k</span></span><br><span class="line">	<span class="keyword">else</span>&#123;r=x;split(ls[r],l,ls[r],k);pu(r);&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></code></pre><hr>
+<br>
 
 <h1 id="Merge-合并"><a href="#Merge-合并" class="headerlink" title="Merge(合并)"></a>Merge(合并)</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>&amp;x,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!l||!r)&#123;x=l|r;<span class="keyword">return</span>;&#125;<span class="comment">//l或r为空则返回另一个(此处比范浩强的写法简洁？)</span></span><br><span class="line">    <span class="keyword">if</span>(fix[l]&gt;fix[r])&#123;x=l;merge(rs[x],rs[x],r);&#125;<span class="comment">//按键值确定父子关系</span></span><br><span class="line">    <span class="keyword">else</span>&#123;x=r;merge(ls[x],l,ls[x]);&#125;pu(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="函数及参数解释："><a href="#函数及参数解释：" class="headerlink" title="函数及参数解释："></a>函数及参数解释：</h2><h3 id="x：当前节点；l：左树当前处理点；r：右树当前处理点"><a href="#x：当前节点；l：左树当前处理点；r：右树当前处理点" class="headerlink" title="x：当前节点；l：左树当前处理点；r：右树当前处理点"></a>x：当前节点；l：左树当前处理点；r：右树当前处理点</h3><p><img src="https://github.com/Access-Rend/Images/blob/master/treap02.jpg?raw=true" alt="merge时的情况" title="变...变态!"></p>
+<h2 id="函数及参数解释：-1"><a href="#函数及参数解释：-1" class="headerlink" title="函数及参数解释："></a>函数及参数解释：</h2><h3 id="x：当前节点；l：左树当前处理点；r：右树当前处理点"><a href="#x：当前节点；l：左树当前处理点；r：右树当前处理点" class="headerlink" title="x：当前节点；l：左树当前处理点；r：右树当前处理点"></a>x：当前节点；l：左树当前处理点；r：右树当前处理点</h3><p><img src="https://github.com/Access-Rend/Images/blob/master/treap02.jpg?raw=true" alt="merge时的情况" title="变...变态!"></p>
+<blockquote>
 <p>由二叉搜索树的性质，左树的最大点与右树的最小点在合并后是衔接的。所以按照这个路径合并点即可。值得注意的是搜索树所没有的性质：随机键值。所以合并时按照键值优先级合并。形象地讲，则是由于优先级，将极左与极右两条链上的点参差接入。</p>
-<ul>
-<li>由上述基础操作构成的常见操作<blockquote>
+</blockquote>
+<hr>
+<br>
+
+<h1 id="由上述基础操作构成的常见操作"><a href="#由上述基础操作构成的常见操作" class="headerlink" title="由上述基础操作构成的常见操作"></a>由上述基础操作构成的常见操作</h1><blockquote>
 <p>有了分裂与合并，下面的常见操作就很好理解了。</p>
 </blockquote>
-</li>
-</ul>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert</span><span class="params">(<span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x,y;split(rt,x,y,v<span class="number">-1</span>);</span><br><span class="line">    merge(x,x,newnode(v));merge(rt,x,y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">del</span><span class="params">(<span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x,y,z;split(rt,x,y,v);split(x,x,z,v<span class="number">-1</span>);</span><br><span class="line">    merge(z,ls[z],rs[z]);merge(x,x,z);merge(rt,x,y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rk</span><span class="params">(<span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x,y;split(rt,x,y,v<span class="number">-1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,sz[x]+<span class="number">1</span>);merge(rt,x,y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">kth</span><span class="params">(<span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x=rt;</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(k==sz[ls[x]]+<span class="number">1</span>)<span class="keyword">return</span> val[x];</span><br><span class="line">        <span class="keyword">if</span>(k&lt;=sz[ls[x]])x=ls[x];</span><br><span class="line">        <span class="keyword">else</span> k-=sz[ls[x]]+<span class="number">1</span>,x=rs[x];<span class="comment">//注意先修改k!!!</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">pre</span><span class="params">(<span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x,y;split(rt,x,y,v<span class="number">-1</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,sz[x]?kth(sz[x]):-inf);</span><br><span class="line">    merge(rt,x,y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">suf</span><span class="params">(<span class="keyword">int</span> v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x,y;split(rt,x,y,v);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>,sz[y]?kth(sz[y]):inf);</span><br><span class="line">    merge(rt,x,y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li>关于区间操作<blockquote>
+<br>
+
+<h1 id="关于区间操作"><a href="#关于区间操作" class="headerlink" title="关于区间操作"></a>关于区间操作</h1><blockquote>
 <p>这就很好办了，没什么好说的。</p>
 </blockquote>
-</li>
-</ul>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">XXX</span><span class="params">(<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x,y,z;split(rt,x,y,r);split(x,x,z,l<span class="number">-1</span>);</span><br><span class="line">    <span class="comment">//do sth such as put reverse tag,put add tag</span></span><br><span class="line">    merge(x,x,z);merge(rt,x,y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
@@ -498,8 +514,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/uncategorized/cjvnv5rvp0003b8w90r7xmh2h/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/uncategorized/cjvnwu6uf0000jow9ef21x1aj/" rel="next" title="前言——在此处留下的记忆">
+                <i class="fa fa-chevron-left"></i> 前言——在此处留下的记忆
               </a>
             
           </div>
@@ -645,7 +661,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Split-分裂-按权值分裂"><span class="nav-number">1.</span> <span class="nav-text">Split(分裂)按权值分裂</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Merge-合并"><span class="nav-number">2.</span> <span class="nav-text">Merge(合并)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数及参数解释："><span class="nav-number">2.1.</span> <span class="nav-text">函数及参数解释：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#x：当前节点；l：左树当前处理点；r：右树当前处理点"><span class="nav-number">2.1.1.</span> <span class="nav-text">x：当前节点；l：左树当前处理点；r：右树当前处理点</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Split-分裂-按权值分裂"><span class="nav-number">1.</span> <span class="nav-text">Split(分裂)按权值分裂</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数及参数解释："><span class="nav-number">1.1.</span> <span class="nav-text">函数及参数解释：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#x：当前节点；k：依据的权值；"><span class="nav-number">1.1.1.</span> <span class="nav-text">x：当前节点；k：依据的权值；</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Split-分裂-按排名-第k大-分裂"><span class="nav-number">2.</span> <span class="nav-text">Split(分裂)按排名(第k大)分裂</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Merge-合并"><span class="nav-number">3.</span> <span class="nav-text">Merge(合并)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数及参数解释：-1"><span class="nav-number">3.1.</span> <span class="nav-text">函数及参数解释：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#x：当前节点；l：左树当前处理点；r：右树当前处理点"><span class="nav-number">3.1.1.</span> <span class="nav-text">x：当前节点；l：左树当前处理点；r：右树当前处理点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#由上述基础操作构成的常见操作"><span class="nav-number">4.</span> <span class="nav-text">由上述基础操作构成的常见操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于区间操作"><span class="nav-number">5.</span> <span class="nav-text">关于区间操作</span></a></li></ol></div>
             
 
           </div>
