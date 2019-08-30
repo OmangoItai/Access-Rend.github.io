@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="耗费很多天 包括： 可持久化线段树 可持久化并查集">
+<meta name="keywords" content="算法,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可持久化数据结构">
+<meta property="og:url" content="http://yoursite.com/算竞/cjzy1ugnn0005l4w9rdmrwwe2/index.html">
+<meta property="og:site_name" content="Rend&#39;s Blog 人大！！">
+<meta property="og:description" content="耗费很多天 包括： 可持久化线段树 可持久化并查集">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github.com/Access-Rend/Images/blob/master/%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%91.png?raw=true%22%E6%89%8B%E5%88%AB%E6%94%BE%E7%9D%80%E5%95%8A%E6%BB%9A%E5%95%8A%E6%B5%81%E6%B0%93%22">
+<meta property="og:image" content="https://github.com/Access-Rend/Images/blob/master/%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%912.png?raw=true%22%E6%89%8B%E5%88%AB%E6%94%BE%E7%9D%80%E5%95%8A%E6%BB%9A%E5%95%8A%E6%B5%81%E6%B0%93%22">
+<meta property="og:updated_time" content="2019-08-02T18:01:26.243Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="可持久化数据结构">
+<meta name="twitter:description" content="耗费很多天 包括： 可持久化线段树 可持久化并查集">
+<meta name="twitter:image" content="https://github.com/Access-Rend/Images/blob/master/%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%91.png?raw=true%22%E6%89%8B%E5%88%AB%E6%94%BE%E7%9D%80%E5%95%8A%E6%BB%9A%E5%95%8A%E6%B5%81%E6%B0%93%22">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/算竞/cjzy1ugnn0005l4w9rdmrwwe2/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>可持久化数据结构 | Rend's Blog 人大！！</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rend's Blog 人大！！</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">奇跡も、魔法も、あるんだよ！</p>
+      
+    
+    
+      <a>
+        <img class="custom-logo-image" src="images/sayakakyouko.jpeg" alt="Rend's Blog 人大！！">
+      </a>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-content1">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/content1" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>还没想好</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>时间线</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+
+<script>
+    
+    window.onload = function(){
+        var path = 'https://malizhi.cn'; //这里要改成你博客的地址
+        var localhostItem = String(window.location).split(path)[1];
+        var LiNode = document.querySelectorAll('#menu > li > a')
+        
+        for(var i = 0; i< LiNode.length;i++){
+            var item = String(LiNode[i].href).split(path)[1];
+            if(item == localhostItem && item != undefined){
+                LiNode[i].setAttribute('style','border-bottom:1px solid black');
+            }
+        }
+    };
+
+</script></div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/算竞/cjzy1ugnn0005l4w9rdmrwwe2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rend人大">
+      <meta itemprop="description" content="看头像就知道人哒也是可爱的人哒~~！">
+      <meta itemprop="image" content="https://github.com/Access-Rend/Images/blob/master/Mahou.Shoujo.Madoka%E2%98%86Magica.full.1862906.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rend's Blog 人大！！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">可持久化数据结构
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+		
+		<div class="post-meta">
+          
+		  
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-08-04 02:01:00" itemprop="dateCreated datePublished" datetime="2019-08-04T02:01:00+08:00">2019-08-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-03 02:01:26" itemprop="dateModified" datetime="2019-08-03T02:01:26+08:00">2019-08-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算竞/" itemprop="url" rel="index"><span itemprop="name">算竞</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            <div class="post-description">耗费很多天 包括： 可持久化线段树 可持久化并查集</div>
+          
+
+        </div>
+      </div></header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇是看了许多篇讲可持久化数据结构的博客，仍然觉得不满意，于是自己决定花大代价写出来的。希望能更低门槛地入门，有误请直喷，越快越好。<br>另：<strong>lxl告诉我 主席树 ≠ 可持久化线段树，所以本篇不涉及该词。</strong><br><br><br></p>
+<h1 id="可持久化线段树"><a href="#可持久化线段树" class="headerlink" title=" 可持久化线段树"></a><center> 可持久化线段树</center></h1><p>该数据结构支持常规的<strong>数据修改</strong>以及<strong>数据查询</strong>，特别的是支持了<strong>历史版本</strong>的<strong>数据查询</strong>。
+下面介绍两个内容：</p>
+<blockquote>
+<p>1.权值线段树<br>2.可持久化线段树</p>
+</blockquote>
+<p>因为大多都是用的第k大，所以只讲第k大了…感觉单纯历史版本大家都会…（不会的请直接看第二节的图（描述建树的那个，要第几个版本顺着第几个根查下去就是了…））<br><br><br></p>
+<h3 id="权值线段树"><a href="#权值线段树" class="headerlink" title="权值线段树"></a>权值线段树</h3><blockquote>
+<p>给出长度为n(n&lt;=1e5)的序列以及m(m&lt;=1e5)个询问，对于每次询问，回答在序列中第k大的元素出现了多少次。</p>
+</blockquote>
+<p>为了引出权值线段树，所以我们采用线段树做法。对序列离散化，并建立权值线段树。<br>代码中仅给出线段树build()，query()以及离散化操作，其实码量很少，请放心阅读。<br>讲解在代码后面：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//***dsc =&gt; discretization [n.][数] 离散化***</span></span><br><span class="line"><span class="comment">//离散化是为节省空间，否则空间会炸¿</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">(<span class="keyword">int</span> &amp;i,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span><span class="comment">//i为指针的模拟下标</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	i = ++cnt;</span><br><span class="line">	<span class="keyword">if</span>(l&lt;r)	build(L[i],l,mid),	build(R[i],mid+<span class="number">1</span>,r),	v[i] = v[L[i]] + v[R[i]];</span><br><span class="line">	<span class="keyword">else</span>	v[i] = dsc_cnt[l];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> i,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(l==r)<span class="keyword">return</span> l;</span><br><span class="line">	<span class="keyword">if</span>(k&gt;=v[i])	<span class="keyword">return</span> query(L[i],l,mid,k);</span><br><span class="line">	<span class="keyword">else</span>	<span class="keyword">return</span> query(R[i],mid+<span class="number">1</span>,k);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;m);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)	<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;a[i]),	dsc[i]=a[i];</span><br><span class="line">	sort(dsc+<span class="number">1</span>,dsc+<span class="number">1</span>+n);<span class="comment">//先对dsc排序</span></span><br><span class="line">	m = unique(dsc+<span class="number">1</span>,dsc+<span class="number">1</span>+n) - dsc - <span class="number">1</span>;<span class="comment">//使用unique对数组去重，并记录去重后其长度</span></span><br><span class="line">&#125;	</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">int</span> t = lower_bound(dsc+<span class="number">1</span>,dsc+<span class="number">1</span>+m,a[i]) - dsc;<span class="comment">//对每一元素进行查找其排名，即第t大</span></span><br><span class="line">	dsc_cnt[t]++;<span class="comment">//第t大的元素计数</span></span><br><span class="line">&#125;</span><br><span class="line">build(root,<span class="number">1</span>,m);<span class="comment">//注意离散化去重后的权值共有m个，即长度为m</span></span><br></pre></td></tr></table></figure>
+
+<p>先从理解dsc_cnt数组开始（<del>其实dsc_cnt只是拿来给你好看的…实际上不用单独开这个数组</del>）。dsc_cnt[i]就是给第i大的值计数的，有多少个，整个dsc_cnt是拿来按序记a中第一二三四…大的共有多少个。<br>对于每次询问k，我们只需要找到i，使：∑ dsc_cnt[1 to i] &lt;= k，那么第k大的数离散化后就落在了dsc第i大里。理解不了试试图，还不行就是我文字功底和语言组织的锅。<br><img src="https://github.com/Access-Rend/Images/blob/master/%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%91.png?raw=true%22%E6%89%8B%E5%88%AB%E6%94%BE%E7%9D%80%E5%95%8A%E6%BB%9A%E5%95%8A%E6%B5%81%E6%B0%93%22" alt="图1"><br>这里建立的权值线段树，只是为了方便区间查找dsc_cnt中1到i的和，其query()原理和平衡数的查找大致一样（左儿子的值与查询值比大小）（请不要想前缀和这种奇怪的事情，往下继续看）。</p>
+<p>设想一下，假如我们建了两棵权值线段树，一棵管辖区间为a序列的[1,l]，另一棵为[1,r]，<br>那么是否就可以利用前缀和的性质，使其做差，从而得到dsc_cnt在[l,r]上的记录（[l,r]上各个数出现了多少次）？这时再在权值线段树中查询，不就是原序列中区间[l,r]的第k大么。</p>
+<p>所以，如果理解了权值线段树，对于静态区间第k大的做法应该有初步想法，即：建立n棵树，第i棵树管辖a中1到i号元素出现次数。然后对于每次查询，回答只需要查询Vr - Vl-1中第k大就行了。</p>
+<h3 id="可持久化线段树-1"><a href="#可持久化线段树-1" class="headerlink" title="可持久化线段树"></a>可持久化线段树</h3><p>建立n棵树，只要你内存够当然也可以这么玩的。<br>可持久化线段树做第k大，思路还是建立n棵树，每棵树T[i]（T为树根）分别管辖a序列中1到i号元素中各数出现次数。<br>直接介绍建树：从1到n的顺序建立，本质上树维护了a[1~i]对应的dsc_cnt数组。<br>每次建树只会比上次多管辖a[i]号元素，设a[i]为第t大，只需将dsc_cnt[t]+1，等价于权值线段树中第t号值+1。所以树T[i]可以只在T[i-1]的基础上修改一条链（自t向root的链）。<br>由于只有一条链不一样，言下之意其余信息都一样，所以下图这种建树方法就很高效了。<br><img src="https://github.com/Access-Rend/Images/blob/master/%E5%8F%AF%E6%8C%81%E4%B9%85%E5%8C%96%E7%BA%BF%E6%AE%B5%E6%A0%912.png?raw=true%22%E6%89%8B%E5%88%AB%E6%94%BE%E7%9D%80%E5%95%8A%E6%BB%9A%E5%95%8A%E6%B5%81%E6%B0%93%22" alt="图2"><br>接下来上板子，命名习惯请自行修改</p>
+<p>我觉得引用挺美的，怕有人接受不了，防止劝退先放个非引用的build参考吧…</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">build</span><span class="params">(<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span><span class="comment">//不写引用可以这样写，update()同理</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> rt = ++cn;</span><br><span class="line">	sum[rt] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span>(l&lt;r)</span><br><span class="line">	&#123;</span><br><span class="line">		L[rt] = build(l,mid);</span><br><span class="line">		R[rt] = build(mid+<span class="number">1</span>,r);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> rt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>板子来了…<br>Luogu P3834【模板】可持久化线段树 1（主席树）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> LL;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">double</span> LD;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> mid ((l+r)&gt;&gt;1)</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> N=<span class="number">2e5</span>+<span class="number">10</span>,inf=<span class="number">0x3f3f3f3f</span>&gt;&gt;<span class="number">1</span>;</span><br><span class="line"><span class="keyword">int</span> n,m,q;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> a[N],dsc[N],T[N];</span><br><span class="line"><span class="keyword">int</span> sum[N&lt;&lt;<span class="number">5</span>],L[N&lt;&lt;<span class="number">5</span>],R[N&lt;&lt;<span class="number">5</span>],cn;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">(<span class="keyword">int</span> &amp;i,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	i = ++cn;	sum[i] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span>(l&lt;r)	build(L[i],l,mid),	build(R[i],mid+<span class="number">1</span>,r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(<span class="keyword">int</span> &amp;i,<span class="keyword">int</span> pre,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	i = ++cn;</span><br><span class="line">	L[i] = L[pre];	R[i] = R[pre];	sum[i] = sum[pre] + <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">if</span>(l&lt;r)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span>(x&lt;=mid)	update(L[i],L[pre],l,mid,x);</span><br><span class="line">		<span class="keyword">else</span>	update(R[i],R[pre],mid+<span class="number">1</span>,r,x);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">query</span><span class="params">(<span class="keyword">int</span> u,<span class="keyword">int</span> v,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(l==r)<span class="keyword">return</span> l;</span><br><span class="line">	<span class="keyword">int</span> x = sum[L[v]] - sum[L[u]];</span><br><span class="line">	<span class="keyword">return</span> x&gt;=k ? query(L[u],L[v],l,mid,k) : query(R[u],R[v],mid+<span class="number">1</span>,r,k-x);<span class="comment">//别介意(´∀`)</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;q);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)	<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;a[i]),	dsc[i]=a[i];</span><br><span class="line">	sort(dsc+<span class="number">1</span>,dsc+<span class="number">1</span>+n);</span><br><span class="line">	m = unique(dsc+<span class="number">1</span>,dsc+<span class="number">1</span>+n) - dsc - <span class="number">1</span>;</span><br><span class="line">	build(T[<span class="number">0</span>],<span class="number">1</span>,m);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> t = lower_bound(dsc+<span class="number">1</span>,dsc+<span class="number">1</span>+m,a[i]) - dsc;</span><br><span class="line">		update(T[i],T[i<span class="number">-1</span>],<span class="number">1</span>,m,t);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span>(q--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> l,r,k;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>,&amp;l,&amp;r,&amp;k);</span><br><span class="line">		<span class="keyword">int</span> t = query(T[l<span class="number">-1</span>],T[r],<span class="number">1</span>,m,k);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%d\n"</span>,dsc[t]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	freopen(<span class="string">"in.txt"</span>,<span class="string">"r"</span>,<span class="built_in">stdin</span>);</span><br><span class="line">	freopen(<span class="string">"out.txt"</span>,<span class="string">"w"</span>,<span class="built_in">stdout</span>);</span><br><span class="line">	solve();</span><br><span class="line">	fclose(<span class="built_in">stdin</span>);</span><br><span class="line">	fclose(<span class="built_in">stdout</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><br><br></p>
+<h1 id="可持久化并查集"><a href="#可持久化并查集" class="headerlink" title=" 可持久化并查集"></a><center> 可持久化并查集</center></h1><h3 id="并查集"><a href="#并查集" class="headerlink" title="并查集"></a>并查集</h3><p>我能肝恢复了再写么？</p>
+<h3 id="部分函数解释"><a href="#部分函数解释" class="headerlink" title="部分函数解释"></a>部分函数解释</h3>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+          
+            <a href="/tags/数据结构/" rel="tag"><i class="fa fa-tag"></i> 数据结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/杂文/cjzy1ugnv000jl4w9wjncrud1/" rel="next" title="天罚">
+                <i class="fa fa-chevron-left"></i> 天罚
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/杂文/cjzy1ugou002ml4w9esm6nxc2/" rel="prev" title="灵感枯竭">
+                灵感枯竭 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://github.com/Access-Rend/Images/blob/master/Mahou.Shoujo.Madoka%E2%98%86Magica.full.1862906.jpg?raw=true" alt="Rend人大">
+            
+              <p class="site-author-name" itemprop="name">Rend人大</p>
+              <div class="site-description motion-element" itemprop="description">看头像就知道人哒也是可爱的人哒~~！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">38</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#可持久化线段树"><span class="nav-number">1.</span> <span class="nav-text"> 可持久化线段树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#权值线段树"><span class="nav-number">1.0.1.</span> <span class="nav-text">权值线段树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可持久化线段树-1"><span class="nav-number">1.0.2.</span> <span class="nav-text">可持久化线段树</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#可持久化并查集"><span class="nav-number">2.</span> <span class="nav-text"> 可持久化并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并查集"><span class="nav-number">2.0.1.</span> <span class="nav-text">并查集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部分函数解释"><span class="nav-number">2.0.2.</span> <span class="nav-text">部分函数解释</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rend人大</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 不是太强但很烦地驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+
+
+<!-- 新增访客统计代码 -->
+
+<div class="busuanzi-count">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      访问用户： <span class="busuanzi-value" id="busuanzi_value_site_uv"></span> 人
+    </span>
+    <div class="powered-by"></div>
+    <span class="site-uv">
+      <i class="fa fa-eye"></i>
+      访问次数： <span class="busuanzi-value" id="busuanzi_value_site_pv"></span> 次
+    </span>
+    <!-- 博客字数统计 -->
+    <span class="site-pv">
+      <i class="fa fa-pencil"></i>
+      博客全站共： <span class="post-count"></span> 字
+    </span>
+</div>
+<!-- 新增访客统计代码 END-->
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
