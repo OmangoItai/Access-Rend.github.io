@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="作者：流露  从初中开始，学几何题的时候就发现了一个问题——当时的几何题只是证明三角形全等。初中教我们的4条证明全等的公理，一概是用三个条件推出全等的结论。也就是边边边、边角边，角边角、角角边。（“边”指已知两三角形某一边边长相同；“角”指两三角形某一对应的角角度相同）第一眼看上去，似乎“边”与“角”是等价的，但有两个排列在公理中并不存在——“角角角”与“边边角”。前者显然只能证明两个三角形相似，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于“自由度”的遐想">
+<meta property="og:url" content="http://yoursite.com/uncategorized/ck3igfhkt001p08c1pp6rubqh/index.html">
+<meta property="og:site_name" content="Rend&#39;s Blog 人大！！">
+<meta property="og:description" content="作者：流露  从初中开始，学几何题的时候就发现了一个问题——当时的几何题只是证明三角形全等。初中教我们的4条证明全等的公理，一概是用三个条件推出全等的结论。也就是边边边、边角边，角边角、角角边。（“边”指已知两三角形某一边边长相同；“角”指两三角形某一对应的角角度相同）第一眼看上去，似乎“边”与“角”是等价的，但有两个排列在公理中并不存在——“角角角”与“边边角”。前者显然只能证明两个三角形相似，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-28T08:26:22.904Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于“自由度”的遐想">
+<meta name="twitter:description" content="作者：流露  从初中开始，学几何题的时候就发现了一个问题——当时的几何题只是证明三角形全等。初中教我们的4条证明全等的公理，一概是用三个条件推出全等的结论。也就是边边边、边角边，角边角、角角边。（“边”指已知两三角形某一边边长相同；“角”指两三角形某一对应的角角度相同）第一眼看上去，似乎“边”与“角”是等价的，但有两个排列在公理中并不存在——“角角角”与“边边角”。前者显然只能证明两个三角形相似，">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/uncategorized/ck3igfhkt001p08c1pp6rubqh/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关于“自由度”的遐想 | Rend's Blog 人大！！</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta custom-logo">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Rend's Blog 人大！！</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">奇跡も、魔法も、あるんだよ！</p>
+      
+    
+    
+      <a>
+        <img class="custom-logo-image" src="images/sayakakyouko.jpeg" alt="Rend's Blog 人大！！">
+      </a>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-content1">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/content1" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>还没想好</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives" rel="section"><i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>时间线</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+
+<script>
+    
+    window.onload = function(){
+        var path = 'https://malizhi.cn'; //这里要改成你博客的地址
+        var localhostItem = String(window.location).split(path)[1];
+        var LiNode = document.querySelectorAll('#menu > li > a')
+        
+        for(var i = 0; i< LiNode.length;i++){
+            var item = String(LiNode[i].href).split(path)[1];
+            if(item == localhostItem && item != undefined){
+                LiNode[i].setAttribute('style','border-bottom:1px solid black');
+            }
+        }
+    };
+
+</script></div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/uncategorized/ck3igfhkt001p08c1pp6rubqh/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Rend人大">
+      <meta itemprop="description" content="看头像就知道人哒也是可爱的人哒~~！">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rend's Blog 人大！！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于“自由度”的遐想
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+		
+		<div class="post-meta">
+          
+		  
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-25 16:26:00" itemprop="dateCreated datePublished" datetime="2019-11-25T16:26:00+08:00">2019-11-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-11-28 16:26:22" itemprop="dateModified" datetime="2019-11-28T16:26:22+08:00">2019-11-28</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </div></header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center>作者：流露</center>
+
+<p>从初中开始，学几何题的时候就发现了一个问题——当时的几何题只是证明三角形全等。初中教我们的4条证明全等的公理，一概是用三个条件推出全等的结论。也就是边边边、边角边，角边角、角角边。（“边”指已知两三角形某一边边长相同；“角”指两三角形某一对应的角角度相同）<br>第一眼看上去，似乎“边”与“角”是等价的，但有两个排列在公理中并不存在——“角角角”与“边边角”。前者显然只能证明两个三角形相似，而无法说明全等，而后者存在多解的可能。值得注意的是，对于后者，也就是“边边角”的情况，我们有时能根据题目中额外的限制条件确定出惟一的一个三角形。<br>现在想来，前者或许是因为欧式空间中，我们称一个图形是“三角形”，就已经暗含了“ 内角和180° ”的条件，第三个角的相等并没有为证明带来更多的信息。而后者，“边边角”，虽然不足以完全确定唯一的一个三角形，却已经足够将可能的三角形收束至有限个，所以，只需要一些微小的额外信息就可以确定出唯一的三角形。（比如已知该三角形为钝角三角形）<br>到了高中接触不定积分，又让我回忆起当年的思考。一个函数的原函数有无穷个，那为什么这样的操作依然有意义？我是说，在小学二年级的时候，明明用了“解有无穷个”的理由来说明“除零”的操作没有意义。在高中当时朦胧地知道这些原函数之间存在求导相同的“不变性”，再后来接触到公理集合论，又知道这样一组相差一个常数的原函数们，虽然有无穷个，但这组原函数构成的集合的基数（Cardinality）仅为{ℵ_1}，而全体函数构成的集合的基数为 {ℵ_2} ，可以说是相当强大的约束条件了。</p>
+<p>到了高中，开始系统的接触解析几何，又发现了更多有意思的事情，但是我现在的数学知识只能进行推测，而不足以解释了。我们说“三点确定一个圆”，因为三点可以唯一的确定一个三角形，而每个三角形又可以对应一个外接圆。但是这并不是一一对应的关系，事实上，每个圆所对应的内接三角形的解空间，我猜是R^3。如果认为平面上的三点是R^6，那么，是不是意味着只需要R^3就足以确定空间上的唯一一个圆呢？确实，另外一种确定平面上圆的方法，就是给定圆心和半径，这恰好为R^3。<br>我们在计算法向量的时候，知道法向量的常数倍并不影响我们的计算，因为我们实际上只需要得到空间中的方向，法向量的长度无关紧要。我们说两个点确定一条直线，五个点确定一条圆锥曲线，但是这些点的位置在曲线上并不能确定，或许我们需要让每个点去掉一个维度。<br>我们又说三点确定一个平面，但点在平面上的位置也是不确定的，我们或许就要去掉两个维度？所以只需要R^3就可以唯一的确定空间的一个平面。我们也确实有这样的定义：取该平面的一个过原点的法向量。</p>
+<p>现在在大学，我们开始接触更复杂的情况，像是三维空间中的曲线与曲面。于是也就自然的想到了更general的问题，但是，这些更general的遐想，不要说让我给出解释，就是准确叙述问题，本身都已经很有难度了。我们说两个点确定一条直线，五个点确定一条圆锥曲线，那么，对于R^n上的一般的多项式，需要几个点来确定呢？查阅了一些资料发现，这个问题已经远远超出我能解决的范围了，似乎需要用到Gromov–Witten invariant 、或者辛几何才能解释……</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/杂文/ck3igfhjj000008c15kslmfpm/" rel="next" title="1024">
+                <i class="fa fa-chevron-left"></i> 1024
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Rend人大">
+            
+              <p class="site-author-name" itemprop="name">Rend人大</p>
+              <div class="site-description motion-element" itemprop="description">看头像就知道人哒也是可爱的人哒~~！</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">42</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Rend人大</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 不是太强但很烦地驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+
+
+<!-- 新增访客统计代码 -->
+
+<div class="busuanzi-count">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      访问用户： <span class="busuanzi-value" id="busuanzi_value_site_uv"></span> 人
+    </span>
+    <div class="powered-by"></div>
+    <span class="site-uv">
+      <i class="fa fa-eye"></i>
+      访问次数： <span class="busuanzi-value" id="busuanzi_value_site_pv"></span> 次
+    </span>
+    <!-- 博客字数统计 -->
+    <span class="site-pv">
+      <i class="fa fa-pencil"></i>
+      博客全站共： <span class="post-count"></span> 字
+    </span>
+</div>
+<!-- 新增访客统计代码 END-->
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
